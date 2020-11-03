@@ -87,31 +87,25 @@ function render_to_map(data_markers, filter) {
   markers.clearLayers();
 
   //2) Realizo un bucle para decidir que marcadores cumplen el filtro, y los agrego al mapa
-  if (filter == "Todos") {
-    console.log("Estoy filtrando por todos los tipos de cocina");
-    //Hago un bucle de toda la información para montar el marker con los datos de lat y long [lat, long]
-    data_markers.forEach(function (value) {
+  //Hago un bucle de toda la información para montar el marker con los datos de lat y long [lat, long]
+  data_markers.forEach(function (value) {
+    if (filter == "Todos"){
       //Llamo a la función que creará el marcador, añadirá su etiqueta y añadirá el marcador al cluster
       createMarker(value);
-    });
-  } else {
-    console.log("Estoy filtrando por tipo de cocina " + filter);
-
-    data_markers.forEach(function (value) {
-      categoriesByRestaurant = value.kind_food.split(",");
-
-      for (category_restaurant of categoriesByRestaurant) {
-        if (category_restaurant == filter) {
-          //Llamo a la función que creará el marcador, añadirá su etiqueta y añadirá el marcador al cluster
-          createMarker(value); 
-        }
-      }
-    });
-  }
+    } else {
+      //Con la función indexOf buscaré en el string de clases de comida, la palabra que nos llegue en el filtro y, 
+      //si la encuentra (!=1), mostraremos el marcador en el mapa
+      if (value.kind_food.indexOf(filter)!= -1) {
+        //Llamo a la función que creará el marcador, añadirá su etiqueta y añadirá el marcador al cluster
+        createMarker(value); 
+      }    
+    }
+  });
 
   //Añado el cluster con los marcadores correspondientes al mapa
   map.addLayer(markers);
 }
+
 
 function createMarker(value) {
   //Creo el marcador
